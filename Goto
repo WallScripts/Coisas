@@ -1,0 +1,82 @@
+local playerDropdown
+local playersData = {}
+local selectedPlayer
+
+local function UpdatePlayerList()
+    local playerList = {}
+    playersData = {}
+
+    for _, player in pairs(game.Players:GetPlayers()) do
+        local formattedName = player.DisplayName .. " (@" .. player.Name .. ")"
+        table.insert(playerList, formattedName)
+        playersData[formattedName] = player.Name
+    end
+
+    table.sort(playerList, function(a, b)
+        return a:lower() < b:lower()
+    end)
+
+    playerDropdown:Refresh(playerList, true)
+end
+
+local function TeleportToPlayer()
+    if not selectedPlayer then
+        OrionLib:MakeNotification({
+            Name = "Erro",
+            Content = "Selecione um player antes de continuar.",
+            Image = "rbxassetid://7733911828",
+            Time = 5
+        })
+        return
+    end
+
+    local playerName = playersData[selectedPlayer]
+    local player = game.Players:FindFirstChild(playerName)
+
+    if player and player.Character then
+        game.Players.LocalPlayer.Character:MoveTo(player.Character.HumanoidRootPart.Position)
+        OrionLib:MakeNotification({
+            Name = "Sucesso",
+            Content = "Teleportado para " .. selectedPlayer,
+            Image = "rbxassetid://7733911828",
+            Time = 5
+        })
+    else
+        OrionLib:MakeNotification({
+            Name = "Erro",
+            Content = "Jogador saiu/Não foi encontrado",
+            Image = "rbxassetid://7733911828",
+            Time = 5
+        })
+    end
+end
+
+playerDropdown = TeleportTab:AddDropdown({
+    Name = "Selecione um player",
+    Options = {},
+    Callback = function(selected)
+        selectedPlayer = selected
+    end
+})
+
+TeleportTab:AddButton({
+    Name = "Tp",
+    Callback = function()
+        TeleportToPlayer()
+    end
+})
+
+TeleportTab:AddButton({
+    Name = "Atualizar lista",
+    Callback = function()
+        UpdatePlayerList()
+        OrionLib:MakeNotification({
+            Name = "Atualização",
+            Content = "Lista de players atualizada",
+            Image = "rbxassetid://7733911828",
+            Time = 5
+        })
+    end
+})
+
+UpdatePlayerList()
