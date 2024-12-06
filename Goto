@@ -22,7 +22,7 @@ end
 local function TeleportToPlayer()
     if not selectedPlayer then
         OrionLib:MakeNotification({
-            Name = "Erro",
+            Name = "Wall Hub System",
             Content = "Selecione um player antes de continuar.",
             Image = "rbxassetid://7733911828",
             Time = 5
@@ -36,14 +36,14 @@ local function TeleportToPlayer()
     if player and player.Character then
         game.Players.LocalPlayer.Character:MoveTo(player.Character.HumanoidRootPart.Position)
         OrionLib:MakeNotification({
-            Name = "Sucesso",
+            Name = "Wall Hub System",
             Content = "Teleportado para " .. selectedPlayer,
             Image = "rbxassetid://7733911828",
             Time = 5
         })
     else
         OrionLib:MakeNotification({
-            Name = "Erro",
+            Name = "Wall Hub Syste",
             Content = "Jogador saiu/Não foi encontrado",
             Image = "rbxassetid://7733911828",
             Time = 5
@@ -51,7 +51,7 @@ local function TeleportToPlayer()
     end
 end
 
-playerDropdown = TeleportTab:AddDropdown({
+    Dropdown = PlayerTab:AddDropdown({
     Name = "Selecione um player",
     Options = {},
     Callback = function(selected)
@@ -59,14 +59,14 @@ playerDropdown = TeleportTab:AddDropdown({
     end
 })
 
-TeleportTab:AddButton({
+PlayerTab:AddButton({
     Name = "Tp",
     Callback = function()
         TeleportToPlayer()
     end
 })
 
-TeleportTab:AddButton({
+PlayerTab:AddButton({
     Name = "Atualizar lista",
     Callback = function()
         UpdatePlayerList()
